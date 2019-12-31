@@ -5,7 +5,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.function.IntUnaryOperator;
-import java.util.function.ToIntFunction;
 
 public class FuelCalculator {
 
