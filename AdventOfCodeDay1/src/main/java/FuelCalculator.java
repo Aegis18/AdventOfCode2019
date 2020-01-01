@@ -1,9 +1,6 @@
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
+import java.io.InputStreamReader;
 import java.util.function.IntUnaryOperator;
 
 public class FuelCalculator {
@@ -22,19 +19,23 @@ public class FuelCalculator {
         return sum;
     };
 
-    public static Integer getFuelNeededPart1(String inputFileName) throws URISyntaxException, IOException {
+    public static Integer getFuelNeededPart1(String inputFileName) {
         return getFuelNeeded(inputFileName, fuelCalculator);
     }
 
-    public static Integer getFuelNeededPart2(String inputFileName) throws URISyntaxException, IOException {
+    public static Integer getFuelNeededPart2(String inputFileName) {
         return getFuelNeeded(inputFileName, fuelCalculator2);
     }
 
-    private static Integer getFuelNeeded(String inputFileName, IntUnaryOperator function) throws IOException, URISyntaxException {
-        List<String> fileContent;
-        Path path = Paths.get(FuelCalculator.class.getResource(inputFileName).toURI());
-        fileContent = Files.readAllLines(path);
-        return fileContent.parallelStream().mapToInt(Integer::parseInt).map(function).sum();
+    private static int getFuelNeeded(String inputFileName, IntUnaryOperator function) {
+        int result = 0;
+        try (final BufferedReader bufferedReader =
+                     new BufferedReader(new InputStreamReader(FuelCalculator.class.getResourceAsStream(inputFileName)))) {
+            result = bufferedReader.lines().parallel().mapToInt(Integer::parseInt).map(function).sum();
+        } catch (final IOException e) {
+            e.printStackTrace(System.err);
+        }
+        return result;
     }
 
 }
